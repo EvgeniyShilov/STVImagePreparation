@@ -13,6 +13,14 @@ public class ImageArea {
         pixels = new ArrayList<>();
     }
 
+    public void add(int x, int y) {
+        pixels.add(new Point(x, y));
+    }
+
+    public boolean contains(int x, int y) {
+        return pixels.contains(new Point(x, y));
+    }
+
     public Image toImage() {
         BufferedImage rawImage = image.getRaw();
         int minX = rawImage.getWidth() - 1;
@@ -35,14 +43,6 @@ public class ImageArea {
         return result;
     }
 
-    public void add(int x, int y) {
-        pixels.add(new Point(x, y));
-    }
-
-    public boolean contains(int x, int y) {
-        return pixels.contains(new Point(x, y));
-    }
-
     public static List<ImageArea> getAreas(Image image) {
         ArrayList<ImageArea> result = new ArrayList<>();
         BufferedImage rawImage = image.getRaw();
@@ -54,9 +54,11 @@ public class ImageArea {
                     for (ImageArea area : result)
                         if (area.contains(w, h))
                             continue loop;
+                    System.out.println("New area!");
                     ImageArea area = new ImageArea(image);
                     addPixelToArea(rawImage, w, h, area);
                     result.add(area);
+                    System.out.println("Area added size is: " + area.pixels.size());
                 }
         return result;
     }

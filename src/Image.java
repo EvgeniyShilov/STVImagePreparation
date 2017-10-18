@@ -32,6 +32,29 @@ public class Image {
         return result;
     }
 
+    public Image resize(int size) {
+        final int width = image.getWidth();
+        final int height = image.getHeight();
+        final int edge = width > height ? width : height;
+        final int xDelta = (edge - width) / 2;
+        final int yDelta = (edge - height) / 2;
+        Image square = new Image(edge, edge);
+        for (int w = 0; w < edge; w++)
+            for (int h = 0; h < edge; h++)
+                square.image.setRGB(w, h, 0xFF000000);
+        for (int w = xDelta; w < xDelta + width; w++)
+            for (int h = yDelta; h < yDelta + height; h++)
+                square.image.setRGB(w, h, image.getRGB(w - xDelta, h - yDelta));
+        Image result = new Image(size, size);
+        for (int w = 0; w < size; w++)
+            for (int h = 0; h < size; h++) {
+                final int x = (w * edge) / size;
+                final int y = (h * edge) / size;
+                result.image.setRGB(w, h, square.image.getRGB(x, y));
+            }
+        return result;
+    }
+
     public static Image loadFrom(String path) throws IOException {
         return new Image(path);
     }
