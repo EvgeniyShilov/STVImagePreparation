@@ -43,7 +43,8 @@ public class ImageArea {
         return result;
     }
 
-    public static List<ImageArea> getAreas(Image image) {
+    public static List<ImageArea> getAreas(Image image, int minPixelsCount) {
+        System.out.println("Searching for areas...");
         ArrayList<ImageArea> result = new ArrayList<>();
         BufferedImage rawImage = image.getRaw();
         final int width = rawImage.getWidth();
@@ -54,12 +55,13 @@ public class ImageArea {
                     for (ImageArea area : result)
                         if (area.contains(w, h))
                             continue loop;
-                    System.out.println("New area!");
+                    System.out.print("New area found. ");
                     ImageArea area = new ImageArea(image);
                     addPixelToArea(rawImage, w, h, area);
-                    result.add(area);
-                    System.out.println("Area added size is: " + area.pixels.size());
+                    System.out.println("Size = " + area.pixels.size());
+                    if (area.pixels.size() >= minPixelsCount) result.add(area);
                 }
+        System.out.println("Total areas count = " + result.size());
         return result;
     }
 

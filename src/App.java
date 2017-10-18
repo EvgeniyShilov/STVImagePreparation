@@ -7,7 +7,9 @@ public class App {
         if (args.length == 0) throw new IllegalArgumentException("No path in the args");
         final String path = args[0];
         Image input = new Image(path + "input.png");
-        List<ImageArea> areas = ImageArea.getAreas(input.apply(new BicolourFilter(128)).save(path + "output.png"));
+        Image bicolour = input.apply(new BicolourFilter(128)).save(path + "bicolour.png");
+        Image median = bicolour.apply(MedianFilter.getInstance()).save(path + "median.png");
+        List<ImageArea> areas = ImageArea.getAreas(median, 50);
         int i = 0;
         for (ImageArea area : areas)
             area.toImage().resize(256).save(path + "areas\\" + i++ + ".png");

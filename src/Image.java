@@ -32,6 +32,23 @@ public class Image {
         return result;
     }
 
+    public Image apply(ConvolutionFilter filter) {
+        Image result = new Image(image.getWidth(), image.getHeight());
+        for (int w = 0; w < image.getWidth(); w++)
+            for (int h = 0; h < image.getHeight(); h++)
+                result.image.setRGB(w, h, filter.process(
+                        image.getRGB(Math.max(w - 1, 0), Math.max(h - 1, 0)),
+                        image.getRGB(w, Math.max(h - 1, 0)),
+                        image.getRGB(Math.min(w + 1, image.getWidth() - 1), Math.max(h - 1, 0)),
+                        image.getRGB(Math.max(w - 1, 0), h),
+                        image.getRGB(w, h),
+                        image.getRGB(Math.min(w + 1, image.getWidth() - 1), h),
+                        image.getRGB(Math.max(w - 1, 0), Math.min(h + 1, image.getHeight() - 1)),
+                        image.getRGB(w, Math.min(h + 1, image.getHeight() - 1)),
+                        image.getRGB(Math.min(w + 1, image.getWidth() - 1), Math.min(h + 1, image.getHeight() - 1))));
+        return result;
+    }
+
     public Image resize(int size) {
         final int width = image.getWidth();
         final int height = image.getHeight();
